@@ -835,6 +835,21 @@ impl<H: Helper> Editor<H> {
         self.helper.as_ref()
     }
 
+    /// replace the helper type used. the current helper will be dropped
+    pub fn replace_helper_type<H2: Helper>(mut self, helper: Option<H2>) -> Editor<H2> {
+        self.set_helper(None);
+        let mut new_editor = Editor {
+            term: self.term,
+            history: self.history,
+            helper: None,
+            kill_ring: self.kill_ring,
+            config: self.config,
+            custom_bindings: self.custom_bindings,
+        };
+        new_editor.set_helper(helper);
+        new_editor
+    }
+
     /// Bind a sequence to a command.
     pub fn bind_sequence<E: Into<Event>, R: Into<EventHandler>>(
         &mut self,
